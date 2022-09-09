@@ -8,14 +8,14 @@ const { Videogame, Genre } = require("../db");
 //GET /videogame/:idVideoGame
 
 //Consulto el detalle del juego por su ID
-router.get("/", async (req, res) => {
-  const { id } = req.params;
+router.get("/:idVideogame", async (req, res) => {
+  const { idVideogame } = req.params;
 
   //Si es un juego creado, me trae el detalle de la DB
-  if (id.includes("-")) {
+  if (idVideogame.includes("-")) {
     let videogameDb = await Videogame.findOne({
       where: {
-        id: id,
+        id: idVideogame,
       },
       include: Genre,
     });
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     //Si no es un juego creado, voy a buscar la info a la API
     try {
       const response = await axios.get(
-        `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
+        `https://api.rawg.io/api/games/${idVideogame}?key=${API_KEY}`
       );
       let {
         id,
